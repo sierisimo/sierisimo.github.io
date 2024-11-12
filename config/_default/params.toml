@@ -1,0 +1,14 @@
+colorScheme = 'fire'
+
+[homepage]
+layout = 'page'
+
+[header]
+layout = 'fixed-fill-blur'
+
+[footer]
+showMenu = true
+showCopyright = true
+showThemeAttribution = true
+showAppearenceSwitcher = true
+showScrollToTop = true
