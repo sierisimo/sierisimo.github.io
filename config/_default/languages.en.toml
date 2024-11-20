@@ -1,0 +1,8 @@
+title = "Sier's Blog"
+
+[params.author]
+name = "Sierisimo Sier"
+image = "img/sier.jpg"
+headline = "A Geek with a blog"
+bio = "About me"
+links = [{ twitter = "https://twitter.com/sierisimo" }]
