@@ -1,0 +1,4 @@
+[tools]
+"pipx:djlint/djlint" = "latest"
+python = "latest"
+zola = "latest"
