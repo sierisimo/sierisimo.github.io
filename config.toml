@@ -49,9 +49,9 @@ radion_menu = [
   { url = "$BASE_URL", name = "Home" },
   { url = "$BASE_URL/categories", name = "Categories" },
   { url = "$BASE_URL/tags", name = "Tags" },
-  { url = "https://google.com", name = "Google" },
 ]
 github = "https://github.com/sierisimo"
+mastodon = "https://androiddev.social/@sierisimo"
 favicon = false
 comments = false
 radion_title = "Sier Blog"
