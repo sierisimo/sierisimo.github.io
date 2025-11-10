@@ -1,6 +1,9 @@
 +++
 title = "Hello Zola(?)"
 date = 2025-11-09 
+[taxonomies]
+categories = ["rant"]
+tags = ["zola", "plain", "rant"]
 +++
 
 I always think about writing a blog or having a place to complain.
