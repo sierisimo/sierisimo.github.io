@@ -2,7 +2,9 @@ on: push
 name: Build and deploy GH Pages
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 concurrency:
   group: "pages"
@@ -11,15 +13,25 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Build and Deploy
+      - name: Build with Zola
         uses: shalzz/zola-deploy-action@master
         env:
-          # Target branch
-          PAGES_BRANCH: main
+          BUILD_ONLY: true
           BUILD_DIR: .
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./public
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
