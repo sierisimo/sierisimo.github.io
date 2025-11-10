@@ -1,6 +1,9 @@
 on: push
 name: Build and deploy GH Pages
 
+permissions:
+  contents: write
+
 concurrency:
   group: "pages"
   cancel-in-progress: false
