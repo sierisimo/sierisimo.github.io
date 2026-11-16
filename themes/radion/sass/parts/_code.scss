@@ -1,0 +1,301 @@
+// Giallo base styles (Zola >=0.22 syntax highlighting)
+.giallo-l {
+  display: inline-block;
+  min-height: 1lh;
+  width: 100%;
+}
+
+.giallo-ln {
+  display: inline-block;
+  user-select: none;
+  margin-right: 0.4em;
+  margin-left: 0.2em;
+}
+
+// Stronger line numbers and highlights than giallo defaults
+pre .giallo-ln {
+  color: #8c959f;
+}
+
+// Dark code block background in both themes
+pre.z-l-code {
+  background-color: #24292E;
+  color: #c7ced2;
+}
+
+pre .z-d-hl,
+pre .z-l-hl {
+  background-color: rgba(255, 208, 0, 0.15);
+  border-left: 3px solid rgba(255, 208, 0, 0.8);
+}
+
+// Language colors map — keys are Zola's data-lang values (giallo grammar names)
+$language-colors: (
+  "astro": #ff5d01,
+  "bash": #4f8f00,
+  "bat": #c1f12e,
+  "c": #555555,
+  "clojure": #5881d8,
+  "cmake": #064f8c,
+  "cpp": #5d8dbf,
+  "crystal": #000100,
+  "csharp": #178600,
+  "css": #264de4,
+  "csv": #237346,
+  "d": #ba595e,
+  "dart": #00d2b8,
+  "default": #151b23,
+  "diff": #8b6914,
+  "docker": #384d54,
+  "elixir": #6e4a7e,
+  "erb": #701516,
+  "erlang": #b83998,
+  "fish": #4aae47,
+  "fsharp": #b845fc,
+  "gd": #3c76a2,
+  "gdresource": #3c76a2,
+  "gdscript": #3c76a2,
+  "gdshader": #3c76a2,
+  "git-commit": #f05032,
+  "git-rebase": #f05032,
+  "gleam": #ffaff3,
+  "go": #00ADD8,
+  "graphql": #e10098,
+  "haml": #701516,
+  "haskell": #5e5086,
+  "hcl": #5c4ee5,
+  "html": #e34c26,
+  "html-derivative": #e34c26,
+  "ini": #d1dbe0,
+  "java": #f89820,
+  "javascript": #e9c92c,
+  "json": dodgerblue,
+  "json5": dodgerblue,
+  "jsonc": dodgerblue,
+  "jsx": #e9c92c,
+  "julia": #9558b2,
+  "kotlin": #F18E33,
+  "latex": #3d6117,
+  "less": #1d365d,
+  "log": #151b23,
+  "lua": #000080,
+  "luau": #000080,
+  "make": #427819,
+  "markdown": #0000ff,
+  "mdx": #0000ff,
+  "nginx": #009639,
+  "nim": #ffe953,
+  "nix": #7ebae4,
+  "nushell": #3aa675,
+  "objective-c": #438eff,
+  "objective-cpp": #438eff,
+  "ocaml": #3be133,
+  "odin": #60798c,
+  "perl": #0298c3,
+  "php": #777bb4,
+  "plain": #151b23,
+  "plsql": #ffcc00,
+  "powershell": #012456,
+  "prisma": #2d3748,
+  "proto": #4285f4,
+  "python": #3572A5,
+  "r": #198ce7,
+  "regex": #151b23,
+  "regexp": #151b23,
+  "ruby": #701516,
+  "rust": #ff4647,
+  "scala": #c22d40,
+  "scss": #cf649a,
+  "shellscript": #4f8f00,
+  "shellsession": #4f8f00,
+  "solidity": #aa6746,
+  "sql": #ffcc00,
+  "svelte": #ff3e00,
+  "svg": #ff9900,
+  "swift": #f05138,
+  "terraform": #5c4ee5,
+  "tex": #3d6117,
+  "text": #151b23,
+  "toml": #9c4221,
+  "tsx": #3178c6,
+  "typescript": #3178c6,
+  "typst": #239dad,
+  "v": #5d87bf,
+  "vue": #41b883,
+  "wasm": #624de8,
+  "xml": #0060ac,
+  "yaml": #cb171e,
+  "zig": #f7a41d,
+);
+
+/// Function to get text color based on background brightness
+/// @param {Color} $color - The background color
+@function get-text-color($color) {
+  $r: red($color);
+  $g: green($color);
+  $b: blue($color);
+  $brightness: (
+    $r * 0.299 + $g * 0.587 + $b * 0.114
+  );
+
+@if ($brightness > 128) {
+  @return #000000; // Use black for bright backgrounds
+}
+
+@else {
+  @return #ffffff; // Use white for dark backgrounds
+}
+}
+
+/// Mixin for language label styles
+@mixin base-label-style($language) {
+  $color-info: map-get($language-colors, $language);
+  $bg-color: nth($color-info, 1);
+  $text-color: get-text-color($bg-color);
+
+  background: $bg-color;
+  color: $text-color;
+  border-radius: 0.25rem;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 0.2rem 0.5rem;
+  text-transform: uppercase;
+  position: absolute;
+  top: 5px;
+  left: 5px; // Positioned at the top-left
+  z-index: 10; // Ensure it's above the code content
+}
+
+// Language label styles
+.code-label {
+  @each $language, $_ in $language-colors {
+    &.label-#{$language} {
+      @include base-label-style($language);
+    }
+  }
+}
+
+// CSS-only language label fallback (no JS)
+@each $language, $bg-color in $language-colors {
+  pre:not(:has(.code-label)):has(> code[data-lang="#{$language}"])::before {
+    content: "#{$language}";
+    background: $bg-color;
+    color: get-text-color($bg-color);
+    border-radius: 0.25rem;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 0.2rem 0.5rem;
+    text-transform: uppercase;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: 10;
+  }
+}
+
+// Clipboard button styles
+.clipboard-button {
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 10;
+  background-color: transparent;
+  border: "#3D444D";
+  border-radius: 3px;
+
+  svg {
+    fill: #9198A1;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.light .clipboard-button {
+  border-width: 1px;
+  border-color: rgba(0, 0, 0, 0.5);
+  background-color: #f3f3f3;
+}
+
+pre {
+  border-radius: 5px;
+  border: none;
+  line-height: 1.4;
+  padding-top: 1.8em;
+  padding-bottom: 1em;
+  position: relative;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  code {
+    border: none;
+    padding: 0;
+
+    table td {
+      padding: 0.4em;
+    }
+  }
+}
+
+pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+pre::-webkit-scrollbar-thumb {
+  background-color: #3D444D;
+  border-radius: 4px;
+}
+
+pre::-webkit-scrollbar-track {
+  background-color: #1E222A;
+}
+
+a code:hover {
+  background: transparent;
+}
+
+// No-JS default: page is light without .dark/.light class, regardless of OS theme
+code:not(pre code) {
+  background: #d0cbc6;
+  color: #1f2328;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-size: 1.05em;
+  /* slightly larger than the surrounding text */
+  line-height: 1.6;
+}
+
+// Code blocks inside blockquotes - fill edge-to-edge
+blockquote > pre {
+  margin-left: -2ch;
+  margin-right: -2ch;
+  border-radius: 0;
+}
+
+blockquote > pre:first-child {
+  margin-top: 0;
+}
+
+blockquote > pre:last-child {
+  margin-bottom: 0;
+}
+
+blockquote:has(> pre:only-child) {
+  background-color: transparent;
+  box-shadow: none;
+
+  > pre {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+}
+
+.hack blockquote > pre code {
+  background: transparent;
+}
