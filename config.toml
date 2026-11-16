@@ -33,14 +33,12 @@ taxonomies = [
   { name = "tags", feed = true },
 ]
 
-[markdown]
 # Whether to do syntax highlighting
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
-highlight_code = true
-
-# When set to "true", emoji aliases translated to their corresponding
-# Unicode emoji equivalent in the rendered Markdown files. (e.g.: :smile: => 😄)
-render_emoji = true
+[markdown.highlighting]
+style = "class"
+dark_theme = "material-theme-palenight"
+light_theme = "everforest-light"
 
 [extra]
 # START: Radion configurations
@@ -51,6 +49,7 @@ radion_menu = [
   { url = "$BASE_URL/tags", name = "Tags" },
 ]
 github = "https://github.com/sierisimo"
+blog_github_repo_url = "https://github.com/sierisimo/sierisimo.github.io"
 mastodon = "https://androiddev.social/@sierisimo"
 favicon = false
 comments = false
